@@ -11,7 +11,7 @@ connection = psycopg2.connect(
 
 cursor = connection.cursor()
 
-cursor.execute("create table if not exists menu (id serial PRIMARY KEY, title varchar, price numeric);")
+cursor.execute("create table if not exists menu (id serial PRIMARY KEY, title varchar, price integer, vegetarian boolean);")
 connection.commit()
 
 @app.route("/")
@@ -27,8 +27,8 @@ def menu_index():
 
 @app.route("/menu", methods=["POST"])
 def menu_create():
-    sql = "insert into menu (title) values (%s);"
-    cursor.execute(sql, (request.json["title"],))
+    sql = "insert into menu (title, price, vegetarian) values (%s, %s, %s)"
+    cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"]))
     connection.commit()
     
     sql = "select * from menu order by ID DESC limit 1;"
@@ -38,14 +38,18 @@ def menu_create():
 
 @app.route("/menu/<int:id>", methods=["GET"])
 def menu_show(id):
-    sql = "select * from books where id = %s;"
+    sql = "select * from menu where id = %s;"
     cursor.execute(sql, (id,))
     menu = cursor.fetchone()
     return jsonify(menu)
 
 @app.route("/menu/<int:id>", methods=["PUT", "PATCH"])
 def menu_update(id):
-    sql = "update menu set title = %s where id = %s;"
+    sql = "update menu set title = %s, price = %s, vegetarian = %s where id = %s;"
+    cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"], id))
+    connection.commit()
+
+    sql = "SELECT * FROM menu WHERE id = %s"
     cursor.execute(sql, (id,))
     menu = cursor.fetchone()
     return jsonify(menu)
