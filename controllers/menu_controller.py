@@ -24,21 +24,10 @@ def menu_create():
 
     return jsonify(menu_schema.dump(new_menu))
 
-    # sql = "insert into menu (title, price, vegetarian) values (%s, %s, %s)"
-    # cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"]))
-    # connection.commit()
-    
-    # sql = "select * from menu order by ID DESC limit 1;"
-    # cursor.execute(sql)
-    # menu = cursor.fetchone()
-    # return jsonify(menu)
-
-# @menu.route("/<int:id>", methods=["GET"])
-# def menu_show(id):
-#     sql = "select * from menu where id = %s;"
-#     cursor.execute(sql, (id,))
-#     menu = cursor.fetchone()
-#     return jsonify(menu)
+@menu.route("/<int:id>", methods=["GET"])
+def menu_show(id):
+    menu = Menu.query.filter_by(id=id)
+    return jsonify(menu_schema.dump(menu))
 
 # @menu.route("/<int:id>", methods=["PUT", "PATCH"])
 # def menu_update(id):
