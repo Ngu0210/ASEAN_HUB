@@ -1,12 +1,14 @@
 from models.Menu import Menu
 from main import db
 from flask import Blueprint, request, jsonify
+from schemas.MenuSchema import menu_schema, menus_schema
 menu = Blueprint("menu", __name__, url_prefix="/menu")
 
 @menu.route("/", methods=["GET"])
 def menu_index():
     menu = Menu.query.all()
-    return(jsonify(menu))
+    serialised_data = menus_schema.dump(menu)
+    return(jsonify(serialised_data))
 
 # @menu.route("/", methods=["POST"])
 # def menu_create():
