@@ -29,16 +29,23 @@ def menu_show(id):
     menu = Menu.query.filter_by(id=id)
     return jsonify(menu_schema.dump(menu))
 
-# @menu.route("/<int:id>", methods=["PUT", "PATCH"])
-# def menu_update(id):
-#     sql = "update menu set title = %s, price = %s, vegetarian = %s where id = %s;"
-#     cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"], id))
-#     connection.commit()
+@menu.route("/<int:id>", methods=["PUT", "PATCH"])
+def menu_update(id):
+    menu = Menu.query.filter_by(id=id)
+    menu_fields = menu_schema.load(request.json)
+    menu.update(menu_fields)
+    db.session.commit()
 
-#     sql = "SELECT * FROM menu WHERE id = %s"
-#     cursor.execute(sql, (id,))
-#     menu = cursor.fetchone()
-#     return jsonify(menu)
+    return jsonify(menu_schema.dump(menu[0]))
+
+    # sql = "update menu set title = %s, price = %s, vegetarian = %s where id = %s;"
+    # cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"], id))
+    # connection.commit()
+
+    # sql = "SELECT * FROM menu WHERE id = %s"
+    # cursor.execute(sql, (id,))
+    # menu = cursor.fetchone()
+    # return jsonify(menu)
 
 # @menu.route("/<int:id>", methods=["DELETE"])
 # def menu_delete(id):
