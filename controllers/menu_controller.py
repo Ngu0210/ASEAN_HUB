@@ -1,17 +1,19 @@
 from models.Menu import Menu
 from main import db
-from flask import Blueprint, request, jsonify
+from flask import Blueprint, request, jsonify, abort    
 from schemas.MenuSchema import menu_schema, menus_schema
 menu = Blueprint("menu", __name__, url_prefix="/menu")
 
 @menu.route("/", methods=["GET"])
 def menu_index():
+    #Returns the menu
     menu = Menu.query.all()
     serialised_data = menus_schema.dump(menu)
     return(jsonify(serialised_data))
 
 @menu.route("/", methods=["POST"])
 def menu_create():
+    #Creates new dish in menu
     menu_fields = menu_schema.load(request.json)
 
     new_menu = Menu()
@@ -26,11 +28,13 @@ def menu_create():
 
 @menu.route("/<int:id>", methods=["GET"])
 def menu_show(id):
+    #Returns specific dish
     menu = Menu.query.filter_by(id=id)
     return jsonify(menu_schema.dump(menu))
 
 @menu.route("/<int:id>", methods=["PUT", "PATCH"])
 def menu_update(id):
+    #Updates specific dish
     menu = Menu.query.filter_by(id=id)
     menu_fields = menu_schema.load(request.json)
     menu.update(menu_fields)
@@ -38,24 +42,15 @@ def menu_update(id):
 
     return jsonify(menu_schema.dump(menu[0]))
 
-    # sql = "update menu set title = %s, price = %s, vegetarian = %s where id = %s;"
-    # cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"], id))
-    # connection.commit()
+@menu.route("/<int:id>", methods=["DELETE"])
+def menu_delete(id):
+    #Deletes specific dish
+    menu = Menu.query.get(id)
 
-    # sql = "SELECT * FROM menu WHERE id = %s"
-    # cursor.execute(sql, (id,))
-    # menu = cursor.fetchone()
-    # return jsonify(menu)
+    if not menu:
+        return abort(404)
 
-# @menu.route("/<int:id>", methods=["DELETE"])
-# def menu_delete(id):
-#     sql = "select * from menu where id = %s;"
-#     cursor.execute(sql, (id,))
-#     menu = cursor.fetchone()
+    db.session.delete(menu)
+    db.session.commit()
 
-#     if menu:
-#         sql = "delete from menu where id = %s;"
-#         cursor.execute(sql, (id,))
-#         connection.commit()
-
-#     return jsonify(menu)    
+    return jsonify(menu_schema.dump(menu))
