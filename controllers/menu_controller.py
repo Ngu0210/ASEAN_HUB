@@ -10,16 +10,28 @@ def menu_index():
     serialised_data = menus_schema.dump(menu)
     return(jsonify(serialised_data))
 
-# @menu.route("/", methods=["POST"])
-# def menu_create():
-#     sql = "insert into menu (title, price, vegetarian) values (%s, %s, %s)"
-#     cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"]))
-#     connection.commit()
+@menu.route("/", methods=["POST"])
+def menu_create():
+    menu_fields = menu_schema.load(request.json)
+
+    new_menu = Menu()
+    new_menu.title = menu_fields["title"]
+    new_menu.price = menu_fields["price"]
+    new_menu.vegetarian = menu_fields["vegetarian"]
+
+    db.session.add(new_menu)
+    db.session.commit()
+
+    return jsonify(menu_schema.dump(new_menu))
+
+    # sql = "insert into menu (title, price, vegetarian) values (%s, %s, %s)"
+    # cursor.execute(sql, (request.json["title"], request.json["price"], request.json["vegetarian"]))
+    # connection.commit()
     
-#     sql = "select * from menu order by ID DESC limit 1;"
-#     cursor.execute(sql)
-#     menu = cursor.fetchone()
-#     return jsonify(menu)
+    # sql = "select * from menu order by ID DESC limit 1;"
+    # cursor.execute(sql)
+    # menu = cursor.fetchone()
+    # return jsonify(menu)
 
 # @menu.route("/<int:id>", methods=["GET"])
 # def menu_show(id):

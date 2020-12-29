@@ -18,7 +18,7 @@ components:
           type: boolean
 
 paths:
-  /menu:
+  /menu/:
     get:
       summary: Gets menu list
       responses:
