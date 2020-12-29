@@ -4,8 +4,10 @@ load_dotenv()
 from flask import Flask
 app = Flask(__name__)
 
-from menu import menu
-app.register_blueprint(menu)
+from controllers import registerable_controllers
+for controller in registerable_controllers:
+    app.register_blueprint(controller)
+    
 
 @app.route("/")
 def home_page():
