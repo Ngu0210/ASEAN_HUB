@@ -1,8 +1,6 @@
 from flask_sqlalchemy import SQLAlchemy
 
 def init_db(app):
-    app.config["SQLALCHEMY_DATABASE_URI"] = "postgresql+psycopg2://app:{4124}@localhost/asean_hub"
-    app.config["SQLALCHEMY_TRACK_MODIFICATIONS"] = False
     db = SQLAlchemy(app)
     return db
 

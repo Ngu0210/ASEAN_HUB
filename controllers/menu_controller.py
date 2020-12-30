@@ -29,7 +29,7 @@ def menu_create():
 @menu.route("/<int:id>", methods=["GET"])
 def menu_show(id):
     #Returns specific dish
-    menu = Menu.query.filter_by(id=id)
+    menu = Menu.query.get(id)
     return jsonify(menu_schema.dump(menu))
 
 @menu.route("/<int:id>", methods=["PUT", "PATCH"])
