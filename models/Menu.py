@@ -1,4 +1,4 @@
-from main import db
+    from main import db
 
 class Menu(db.Model):
     __tablename__ = "menu"
