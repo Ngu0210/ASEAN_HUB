@@ -3,7 +3,7 @@ from dotenv import load_dotenv
 load_dotenv()
 
 #Flask application creation
-from flask import Flask
+from flask import Flask, jsonify
 app = Flask(__name__)
 app.config.from_object("default_settings.app_config")
 
@@ -23,6 +23,12 @@ app.register_blueprint(db_commands)
 from controllers import registerable_controllers
 for controller in registerable_controllers:
     app.register_blueprint(controller)
+
+from marshmallow.exceptions import ValidationError
+
+@app.errorhandler(ValidationError)
+def handle_bad_request(error):
+    return (jsonify(error.messages), 400)
     
 #Index page end point
 @app.route("/")
