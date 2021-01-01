@@ -20,7 +20,12 @@ def seed_db():
     faker = Faker()
 
     for i in range(10):
-        book = Book()
-        book.title = faker.catch_phrase()
-        db.session.add(book)
+        menu = Menu()
+        menu.title = faker.color_name()
+        menu.price = faker.random_number(digits=2)
+        menu.vegetarian = faker.boolean(chance_of_getting_true=50)
+        db.session.add(menu)
         print(f"{i} book record(s) created")
+
+    db.session.commit()
+    print("Tables seeded")
