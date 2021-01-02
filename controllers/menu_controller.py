@@ -1,7 +1,10 @@
 from models.Menu import Menu
+from models.User import User
 from main import db
 from flask import Blueprint, request, jsonify, abort    
 from schemas.MenuSchema import menu_schema, menus_schema
+from flask_jwt_extended import jwt_required, get_jwt_identity
+
 menu = Blueprint("menu", __name__, url_prefix="/menu")
 
 @menu.route("/", methods=["GET"])
@@ -12,16 +15,24 @@ def menu_index():
     return(jsonify(serialised_data))
 
 @menu.route("/", methods=["POST"])
+@jwt_required
 def menu_create():
     #Creates new dish in menu
     menu_fields = menu_schema.load(request.json)
+    user_id = get_jwt_identity()
+
+    user = User.query.get(user_id)
+
+    if not user:
+        return abort(401, description="Invalid user")
 
     new_menu = Menu()
     new_menu.title = menu_fields["title"]
     new_menu.price = menu_fields["price"]
     new_menu.vegetarian = menu_fields["vegetarian"]
 
-    db.session.add(new_menu)
+    user.menu.append(new_menu)
+
     db.session.commit()
 
     return jsonify(menu_schema.dump(new_menu))
@@ -33,22 +44,42 @@ def menu_show(id):
     return jsonify(menu_schema.dump(menu))
 
 @menu.route("/<int:id>", methods=["PUT", "PATCH"])
+@jwt_required
 def menu_update(id):
     #Updates specific dish
-    menu = Menu.query.filter_by(id=id)
     menu_fields = menu_schema.load(request.json)
+    user_id = get_jwt_identity()
+
+    user = User.query.get(user_id)
+
+    if not user:
+        return abort(401, description="Invalid user")
+
+    menu = Menu.query.filter_by(id=id, user_id=user.id)
+
+    if menu.count() != 1:
+        return abort(401, description="Unauthorized to update menu")
+
     menu.update(menu_fields)
     db.session.commit()
 
     return jsonify(menu_schema.dump(menu[0]))
 
 @menu.route("/<int:id>", methods=["DELETE"])
+@jwt_required
 def menu_delete(id):
     #Deletes specific dish
-    menu = Menu.query.get(id)
+    user_id = get_jwt_identity()
+
+    user = User.query.get(user_id)
+
+    if not user:
+        return abort(401, description="Invalid user")
+
+    menu = Menu.query.filter_by(id=id, user_id=user.id).first()
 
     if not menu:
-        return abort(404)
+        return abort(400)
 
     db.session.delete(menu)
     db.session.commit()
