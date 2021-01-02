@@ -24,3 +24,7 @@ Ethical obligations: The ethical obligations, are to make sure for every git pus
 Legal obligations: Creating database where user will have to enter personal information will be taken highly serious. User's information has the rights to be protected, secure and maintain for any mishaps or malicious events in present or future.
 
 For developers, in the occasion of user's information being exposed, developers will not under any circumstance use user's information for any personal endeavors, or any actions that is not believed to be assisting the development process.
+
+## EC2 Instance
+
+**54.153.227.234**
