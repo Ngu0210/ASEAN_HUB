@@ -1,4 +1,4 @@
-from models.Menu import Menu
+from models.Menu import Menu, Portion
 from models.User import User
 from main import db
 from flask import Blueprint, request, jsonify, abort, g
