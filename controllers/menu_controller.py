@@ -1,9 +1,10 @@
 from models.Menu import Menu
 from models.User import User
 from main import db
-from flask import Blueprint, request, jsonify, abort    
+from flask import Blueprint, request, jsonify, abort, g
 from schemas.MenuSchema import menu_schema, menus_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
+from services.auth_service import verify_user
 
 menu = Blueprint("menu", __name__, url_prefix="/menu")
 
@@ -16,15 +17,10 @@ def menu_index():
 
 @menu.route("/", methods=["POST"])
 @jwt_required
-def menu_create():
+@verify_user
+def menu_create(user=None):
     #Creates new dish in menu
     menu_fields = menu_schema.load(request.json)
-    user_id = get_jwt_identity()
-
-    user = User.query.get(user_id)
-
-    if not user:
-        return abort(401, description="Invalid user")
 
     new_menu = Menu()
     new_menu.title = menu_fields["title"]
@@ -45,15 +41,10 @@ def menu_show(id):
 
 @menu.route("/<int:id>", methods=["PUT", "PATCH"])
 @jwt_required
-def menu_update(id):
+@verify_user
+def menu_update(id, user=None):
     #Updates specific dish
     menu_fields = menu_schema.load(request.json)
-    user_id = get_jwt_identity()
-
-    user = User.query.get(user_id)
-
-    if not user:
-        return abort(401, description="Invalid user")
 
     menu = Menu.query.filter_by(id=id, user_id=user.id)
 
@@ -67,14 +58,9 @@ def menu_update(id):
 
 @menu.route("/<int:id>", methods=["DELETE"])
 @jwt_required
-def menu_delete(id):
+@verify_user
+def menu_delete(id, user=None):
     #Deletes specific dish
-    user_id = get_jwt_identity()
-
-    user = User.query.get(user_id)
-
-    if not user:
-        return abort(401, description="Invalid user")
 
     menu = Menu.query.filter_by(id=id, user_id=user.id).first()
 
