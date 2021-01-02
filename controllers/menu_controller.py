@@ -5,13 +5,14 @@ from flask import Blueprint, request, jsonify, abort, g
 from schemas.MenuSchema import menu_schema, menus_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from services.auth_service import verify_user
+from sqlalchemy.orm import joinedload
 
 menu = Blueprint("menu", __name__, url_prefix="/menu")
 
 @menu.route("/", methods=["GET"])
 def menu_index():
     #Returns the menu
-    menu = Menu.query.all()
+    menu = Menu.query.options(joinedload("user")).all() 
     serialised_data = menus_schema.dump(menu)
     return(jsonify(serialised_data))
 
