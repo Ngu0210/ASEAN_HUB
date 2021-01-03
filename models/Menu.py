@@ -6,8 +6,6 @@ class Portion(str, Enum):
     medium = 'medium'
     large = 'large'
 
-
-
 class Menu(db.Model):
     __tablename__ = "menu"
 
@@ -19,7 +17,7 @@ class Menu(db.Model):
     vegetarian = db.Column(db.Boolean())
     portion = db.Column(portion_status)
 
-    user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
 
     def __repr__(self):
         return f"<Book {self.title}>"

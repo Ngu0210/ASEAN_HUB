@@ -12,14 +12,13 @@ menu = Blueprint("menu", __name__, url_prefix="/menu")
 @menu.route("/", methods=["GET"])
 def menu_index():
     #Returns the menu
-    menu = Menu.query.options(joinedload("user")).all() 
+    menu = Menu.query.all()
     serialised_data = menus_schema.dump(menu)
     return(jsonify(serialised_data))
 
 @menu.route("/", methods=["POST"])
 @jwt_required
-@verify_user
-def menu_create(user=None):
+def menu_create():
     #Creates new dish in menu
     menu_fields = menu_schema.load(request.json)
 
@@ -27,6 +26,7 @@ def menu_create(user=None):
     new_menu.title = menu_fields["title"]
     new_menu.price = menu_fields["price"]
     new_menu.vegetarian = menu_fields["vegetarian"]
+    new_menu.portion = menu_fields["portion"]
 
     user.menu.append(new_menu)
 
@@ -42,15 +42,11 @@ def menu_show(id):
 
 @menu.route("/<int:id>", methods=["PUT", "PATCH"])
 @jwt_required
-@verify_user
-def menu_update(id, user=None):
+def menu_update(id):
     #Updates specific dish
     menu_fields = menu_schema.load(request.json)
 
-    menu = Menu.query.filter_by(id=id, user_id=user.id)
-
-    if menu.count() != 1:
-        return abort(401, description="Unauthorized to update menu")
+    menu = Menu.query.filter_by(id=id)
 
     menu.update(menu_fields)
     db.session.commit()
@@ -59,8 +55,7 @@ def menu_update(id, user=None):
 
 @menu.route("/<int:id>", methods=["DELETE"])
 @jwt_required
-@verify_user
-def menu_delete(id, user=None):
+def menu_delete(id):
     #Deletes specific dish
 
     menu = Menu.query.filter_by(id=id, user_id=user.id).first()

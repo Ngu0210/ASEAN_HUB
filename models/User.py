@@ -7,7 +7,7 @@ class  User(db.Model):
     email = db.Column(db.String(), nullable=False, unique=True)
     password = db.Column(db.String(), nullable=False)
 
-    menu = db.relationship("Menu", backref="user", lazy="dynamic")
+    # menu = db.relationship("Menu", backref="user", lazy="dynamic")
 
     def __repr__(self):
         return f"<User {self.email}>"
