@@ -9,6 +9,8 @@ class UserSchema(ma.SQLAlchemyAutoSchema):
 
     email = ma.String(required=True, validate=[Length(min=4), Email()])
     password = ma.String(required=True, validate=[Length(min=6)])
+    first_name = ma.String(required=True, validate=[Length(min=2)])
+    last_name = ma.String(required=True, validate=[Length(min=2)])
 
 user_schema = UserSchema()
 users_schema = UserSchema(many=True)

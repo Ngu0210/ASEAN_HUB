@@ -10,8 +10,9 @@ class MenuSchema(ma.SQLAlchemyAutoSchema):
     title = ma.String(required=True, validate=Length(max=20))
     price = ma.Integer(required=False)
     vegetarian = ma.Boolean(required=False)
+    portion = ma.String(required=False)
 
-    user = ma.Nested(UserSchema)
+    # user = ma.Nested(UserSchema)
 
 menu_schema = MenuSchema()
 menus_schema = MenuSchema(many=True)

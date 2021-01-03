@@ -1,11 +1,17 @@
 from flask import Blueprint, abort, jsonify, request
-from schemas.UserSchema import user_schema
+from schemas.UserSchema import user_schema, users_schema
 from models.User import User
 from main import db, bcrypt
 from flask_jwt_extended import create_access_token
 from datetime import timedelta
 
 auth = Blueprint("auth", __name__, url_prefix="/auth")
+
+@auth.route("/", methods=['GET'])
+def auth_user():
+    user = User.query.all()
+    serialised_data = users_schema.dump(user)
+    return jsonify(serialised_data)
 
 @auth.route("/register", methods=["POST"])
 def auth_register():
