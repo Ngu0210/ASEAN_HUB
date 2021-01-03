@@ -2,7 +2,7 @@ from main import db
 from sqlalchemy.sql import func
 
 class Order(db.Model):
-    __tablename__ = "order"
+    __tablename__ = "user_order"
 
     id = db.Column(db.Integer, primary_key=True)
     date_time = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
