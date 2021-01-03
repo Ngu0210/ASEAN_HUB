@@ -46,7 +46,7 @@ def seed_db():
         menus.append(menu)
 
         db.session.add(menu)
-        print(f"{i} book record(s) created")
+        print(f"{i} menu record(s) created")
 
     db.session.commit()
 

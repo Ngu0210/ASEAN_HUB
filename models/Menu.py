@@ -12,12 +12,8 @@ class Menu(db.Model):
     portion_status = db.Enum(Portion, name='portion_status_enum')
 
     id = db.Column(db.Integer(), primary_key=True)
-    title = db.Column(db.String())
-    price = db.Column(db.Integer())
-    vegetarian = db.Column(db.Boolean())
-    portion = db.Column(portion_status)
-
+    main_menu = db.Column(db.Integer, db.ForeignKey("main_menu.id"), nullable=False)
     order = db.relationship("Order", backref="menu", lazy="dynamic")
 
     def __repr__(self):
-        return f"<Book {self.title}>"
+        return f"<Menu {self.title}>"

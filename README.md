@@ -25,6 +25,7 @@ Legal obligations: Creating database where user will have to enter personal info
 
 For developers, in the occasion of user's information being exposed, developers will not under any circumstance use user's information for any personal endeavors, or any actions that is not believed to be assisting the development process.
 
-## EC2 Instance
+## EC2 Instance & JWT_SECRET_KEY
 
 **54.153.227.234**
+**}5<()";mr8h?F#{)**
