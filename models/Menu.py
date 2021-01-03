@@ -13,6 +13,7 @@ class Menu(db.Model):
 
     id = db.Column(db.Integer(), primary_key=True)
     main_menu = db.Column(db.Integer, db.ForeignKey("main_menu.id"), nullable=False)
+    drink_menu = db.Column(db.Integer, db.ForeignKey("drink_menu.id"), nullable=False)
     order = db.relationship("Order", backref="menu", lazy="dynamic")
 
     def __repr__(self):
