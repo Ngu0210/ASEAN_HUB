@@ -17,7 +17,7 @@ class Menu(db.Model):
     vegetarian = db.Column(db.Boolean())
     portion = db.Column(portion_status)
 
-    # user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
+    order = db.relationship("Order", backref="menu", lazy="dynamic")
 
     def __repr__(self):
         return f"<Book {self.title}>"

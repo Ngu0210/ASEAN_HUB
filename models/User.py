@@ -1,6 +1,7 @@
 from main import db
+from models.Order import Order
 
-class  User(db.Model):
+class User(db.Model):
     __tablename__="users"
 
     id = db.Column(db.Integer, primary_key=True)
@@ -10,7 +11,7 @@ class  User(db.Model):
     last_name = db.Column(db.String(), nullable=False)
 
 
-    # menu = db.relationship("Menu", backref="user", lazy="dynamic")
+    order = db.relationship("Order", backref="users")
 
     def __repr__(self):
         return f"<User {self.email}>"
