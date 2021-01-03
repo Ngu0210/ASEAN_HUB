@@ -1,10 +1,10 @@
 from main import db
-import enum
+from enum import Enum
 
-class Portion(enum.Enum):
-    small = 1
-    medium = 2
-    large = 3
+class Portion(str, Enum):
+    small = 'small'
+    medium = 'medium'
+    large = 'large'
 
 
 
