@@ -13,4 +13,3 @@ class Order(db.Model):
         return f"<Order {self.id}, {self.date_time}>"
 
 order = Order()
-print("hello")
