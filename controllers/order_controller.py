@@ -9,3 +9,8 @@ def order_index():
     order = Order.query.all()
     serialized_data = order_schema.dump(order)
     return jsonify(serialized_data)
+
+@order.route("/" methods=["POST"])
+def order_menu():
+    order_field = order_schema.load(request.json)
+
