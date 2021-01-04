@@ -42,6 +42,7 @@ def menu_show(id):
 
 @menu.route("/<int:id>", methods=["PUT", "PATCH"])
 @jwt_required
+@verify_admin
 def menu_update(id):
     #Updates specific dish
     menu_fields = menu_schema.load(request.json)
@@ -55,6 +56,7 @@ def menu_update(id):
 
 @menu.route("/<int:id>", methods=["DELETE"])
 @jwt_required
+@verify_admin
 def menu_delete(id):
     #Deletes specific dish
 

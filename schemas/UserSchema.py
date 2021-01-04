@@ -21,7 +21,6 @@ class RegisterSchema(ma.SQLAlchemyAutoSchema):
     password = ma.String(required=True, validate=[Length(min=6)])
     first_name = ma.String(required=True, validate=[Length(min=2)])
     last_name = ma.String(required=True, validate=[Length(min=2)])
-    print("hello")
 
 register_schema = RegisterSchema()
 user_schema = UserSchema()

@@ -22,12 +22,13 @@ def seed_db():
     users = []
     menus = []
 
-    for i in range(5):
+    for i in range(10):
         user = User()
         user.email = faker.email()
         user.password = bcrypt.generate_password_hash("123456").decode("utf-8")
         user.first_name = faker.first_name()
         user.last_name = faker.last_name()
+        user.admin = faker.boolean(chance_of_getting_true=50)
 
         users.append(user)
 
