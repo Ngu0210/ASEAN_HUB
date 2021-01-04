@@ -4,10 +4,9 @@ class Config(object):
     SQLALCHEMY_TRACK_MODIFICATIONS = False
     JWT_SECRET_KEY = '4124'
 
-
 class DevelopmentConfig(Config):
     DEBUG = True
-
+    
     @property
     def SQLALCHEMY_DATABASE_URI(self):
         value = os.getenv("DB_URI_TEST")
@@ -20,7 +19,7 @@ class DevelopmentConfig(Config):
 class ProductionConfig(Config):
     @property
     def JWT_SECRET_KEY(self):
-        value = os.getenv("JWT_SECRET_KEY")
+        value = os.getenv("JWE_SECRET_KEY")
 
         if not value:
             raise ValueError("JWT_SECRET_KET is not set")

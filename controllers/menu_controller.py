@@ -1,30 +1,69 @@
-from models.Main_Menu import Main_Menu
-# from models.User import User
+from models.Menu import Menu
+from models.User import User
 from main import db
-from flask import Blueprint, jsonify, abort, g, request, render_template
-from schemas.Main_MenuSchema import main_menu_schema, main_menus_schema
+from flask import Blueprint, request, jsonify, abort, g
+from schemas.MenuSchema import menu_schema, menus_schema
+from flask_jwt_extended import jwt_required, get_jwt_identity
+from services.auth_service import verify_user
+from sqlalchemy.orm import joinedload
 
 menu = Blueprint("menu", __name__, url_prefix="/menu")
 
 @menu.route("/", methods=["GET"])
 def menu_index():
     #Returns the menu
-    main = Main_Menu.query.all()
-    serialised_data = main_menus_schema.dump(main)
+    menu = Menu.query.all()
+    serialised_data = menus_schema.dump(menu)
     return(jsonify(serialised_data))
 
-@menu.route("/main/", methods=["POST"])
-def main_menu_create():
-    #Creates new main in menu
-    main_menu_fields = main_menu_schema.load(request.json)
+@menu.route("/", methods=["POST"])
+@jwt_required
+def menu_create():
+    #Creates new dish in menu
+    menu_fields = menu_schema.load(request.json)
 
-    main_menu = Main_Menu()
-    print("hello")
-    main_menu.title = main_menu_fields["title"]
-    main_menu.price = main_menu_fields["price"]
-    main_menu.vegetarian = main_menu_fields["vegetarian"]
+    new_menu = Menu()
+    new_menu.title = menu_fields["title"]
+    new_menu.price = menu_fields["price"]
+    new_menu.vegetarian = menu_fields["vegetarian"]
+    new_menu.portion = menu_fields["portion"]
 
-    db.session.add(main_menu)
+    user.menu.append(new_menu)
+
     db.session.commit()
 
-    return jsonify(main_menu_schema.dump(main_menu))
+    return jsonify(menu_schema.dump(new_menu))
+
+@menu.route("/<int:id>", methods=["GET"])
+def menu_show(id):
+    #Returns specific dish
+    menu = Menu.query.get(id)
+    return jsonify(menu_schema.dump(menu))
+
+@menu.route("/<int:id>", methods=["PUT", "PATCH"])
+@jwt_required
+def menu_update(id):
+    #Updates specific dish
+    menu_fields = menu_schema.load(request.json)
+
+    menu = Menu.query.filter_by(id=id)
+
+    menu.update(menu_fields)
+    db.session.commit()
+
+    return jsonify(menu_schema.dump(menu[0]))
+
+@menu.route("/<int:id>", methods=["DELETE"])
+@jwt_required
+def menu_delete(id):
+    #Deletes specific dish
+
+    menu = Menu.query.filter_by(id=id, user_id=user.id).first()
+
+    if not menu:
+        return abort(400)
+
+    db.session.delete(menu)
+    db.session.commit()
+
+    return jsonify(menu_schema.dump(menu))

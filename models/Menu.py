@@ -1,20 +1,14 @@
-# from main import db
-# from enum import Enum
+from main import db
 
-# class Portion(str, Enum):
-#     small = 'small'
-#     medium = 'medium'
-#     large = 'large'
+class Menu(db.Model):
+    __tablename__ = "menu"
 
-# class Menu(db.Model):
-#     __tablename__ = "menu"
+    id = db.Column(db.Integer(), primary_key=True)
+    title = db.Column(db.String())
+    price = db.Column(db.Integer())
+    vegetarian = db.Column(db.Boolean())
 
-#     portion_status = db.Enum(Portion, name='portion_status_enum')
+    order = db.relationship("Order", backref="menu", lazy="dynamic")
 
-#     id = db.Column(db.Integer(), primary_key=True)
-#     main_menu = db.Column(db.Integer, db.ForeignKey("main_menu.id"), nullable=False)
-#     drink_menu = db.Column(db.Integer, db.ForeignKey("drink_menu.id"), nullable=False)
-#     order = db.relationship("Order", backref="menu", lazy="dynamic")
-
-#     def __repr__(self):
-#         return f"<Menu {self.title}>"
+    def __repr__(self):
+        return f"<Book {self.title}>"

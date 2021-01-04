@@ -46,7 +46,7 @@ def seed_db():
         menus.append(menu)
 
         db.session.add(menu)
-        print(f"{i} menu record(s) created")
+        print(f"{i} book record(s) created")
 
     db.session.commit()
 
@@ -54,6 +54,7 @@ def seed_db():
         order = Order()
         order.menu_id = random.choice(menus).id
         order.user_id = random.choice(users).id
+        order.test = "test"
         
         db.session.add(order)
         print(f"{i} order created")
