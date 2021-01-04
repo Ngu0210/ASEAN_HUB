@@ -1,5 +1,5 @@
 from main import db
-from models.Menu import Menu
+# from models.Menu import Menu
 
 class Drink_Menu(db.Model):
     __tablename__ = "drink_menu"
@@ -9,7 +9,7 @@ class Drink_Menu(db.Model):
     price = db.Column(db.Integer(),)
     ice = db.Column(db.Boolean(),)
 
-    menu = db.relationship("Menu", backref="menu-drink_menu")
+    # menu = db.relationship("Menu", backref="menu-drink_menu")
 
     def __repr__(self):
         return f"<drink {self.title}>"

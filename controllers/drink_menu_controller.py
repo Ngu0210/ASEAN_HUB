@@ -1,4 +1,5 @@
-from flask import Blueprint, jsonify, abort, g
+from flask import Blueprint, jsonify, abort, g, request
+from main import db
 from models.Drink_Menu import Drink_Menu
 from schemas.Drink_MenuSchema import drink_menu_schema, drink_menus_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
@@ -10,7 +11,7 @@ drink_menu = Blueprint("drink_menu", __name__, url_prefix="/menu/drink")
 @drink_menu.route("/", methods=[ "GET"])
 def drink_menu_index():
     drink_menu = Drink_Menu.query.all()
-    serialized_data = drink_menus_schema(drink_menu)
+    serialized_data = drink_menus_schema.dump(drink_menu)
     return jsonify(serialized_data)
 
 @drink_menu.route("/", methods=["POST"])
@@ -23,6 +24,7 @@ def drink_menu_create():
     drink_menu.price = drink_menu_fields["price"]
     drink_menu.ice = drink_menu_fields["ice"]
 
+    db.session.add(drink_menu)
     db.session.commit()
 
     return jsonify(drink_menu_schema.dump(drink_menu))

@@ -6,7 +6,7 @@ class Order(db.Model):
 
     id = db.Column(db.Integer, primary_key=True)
     date_time = db.Column(db.DateTime(timezone=True), nullable=False, server_default=func.now())
-    menu_id = db.Column(db.Integer, db.ForeignKey("menu.id"), nullable=False)
+    # menu_id = db.Column(db.Integer, db.ForeignKey("menu.id"), nullable=False)
     user_id = db.Column(db.Integer, db.ForeignKey("users.id"), nullable=False)
     
     def __repr__(self):
