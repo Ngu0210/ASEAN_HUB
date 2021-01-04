@@ -9,6 +9,7 @@ class User(db.Model):
     password = db.Column(db.String(), nullable=False)
     first_name = db.Column(db.String(), nullable=False)
     last_name = db.Column(db.String(), nullable=False)
+    admin = db.Column(db.Boolean(), default=False)
 
 
     order = db.relationship("Order", backref="users")

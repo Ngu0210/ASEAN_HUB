@@ -41,7 +41,6 @@ def seed_db():
         menu.title = faker.color_name()
         menu.price = faker.random_number(digits=2)
         menu.vegetarian = faker.boolean(chance_of_getting_true=50)
-        menu.portion = random.choice(menu.portion_status.enums)
         
         menus.append(menu)
 

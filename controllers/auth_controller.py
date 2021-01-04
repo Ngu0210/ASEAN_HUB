@@ -1,5 +1,5 @@
 from flask import Blueprint, abort, jsonify, request
-from schemas.UserSchema import user_schema, users_schema
+from schemas.UserSchema import user_schema, users_schema, register_schema
 from models.User import User
 from main import db, bcrypt
 from flask_jwt_extended import create_access_token
@@ -16,7 +16,7 @@ def auth_user():
 @auth.route("/register", methods=["POST"])
 def auth_register():
 
-    user_fields = user_schema.load(request.json)
+    user_fields = register_schema.load(request.json)
     
     user = User.query.filter_by(email=user_fields["email"]).first()
 

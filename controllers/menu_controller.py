@@ -3,8 +3,8 @@ from models.User import User
 from main import db
 from flask import Blueprint, request, jsonify, abort, g
 from schemas.MenuSchema import menu_schema, menus_schema
-from flask_jwt_extended import jwt_required, get_jwt_identity
-from services.auth_service import verify_user
+from flask_jwt_extended import jwt_required
+from services.auth_service import verify_user, verify_admin
 from sqlalchemy.orm import joinedload
 
 menu = Blueprint("menu", __name__, url_prefix="/menu")
@@ -18,7 +18,8 @@ def menu_index():
 
 @menu.route("/", methods=["POST"])
 @jwt_required
-def menu_create():
+@verify_admin
+def menu_create(user=None):
     #Creates new dish in menu
     menu_fields = menu_schema.load(request.json)
 
@@ -26,7 +27,6 @@ def menu_create():
     new_menu.title = menu_fields["title"]
     new_menu.price = menu_fields["price"]
     new_menu.vegetarian = menu_fields["vegetarian"]
-    new_menu.portion = menu_fields["portion"]
 
     user.menu.append(new_menu)
 

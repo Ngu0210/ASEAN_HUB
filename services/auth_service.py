@@ -18,3 +18,22 @@ def verify_user(function):
         return function(*args, user=user, **kwargs)
         
     return wrapper
+
+def verify_admin(function):
+    @wraps(function)
+    def wrapper(*args, **kwargs):
+        user_id = get_jwt_identity()
+
+        user = User.query.get(user_id)
+
+        if not user:
+            return abort(401, description="Invalid user")
+
+        if user.admin == False:
+            return abort(401, description="Invalid Privileges")
+
+        g.user = user 
+
+        return function(*args, user=user, **kwargs)
+        
+    return wrapper
