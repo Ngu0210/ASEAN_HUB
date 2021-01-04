@@ -1,7 +1,7 @@
 from flask import Blueprint, jsonify, abort, g, request, render_template
 from main import db
 from models.Main_Menu import Main_Menu
-from models.Drink_Menu import Drink_Menu
+# from models.Drink_Menu import Drink_Menu
 from schemas.Main_MenuSchema import main_menu_schema, main_menus_schema
 from flask_jwt_extended import jwt_required, get_jwt_identity
 from services.auth_service import verify_user
