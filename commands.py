@@ -54,7 +54,6 @@ def seed_db():
         order = Order()
         order.menu_id = random.choice(menus).id
         order.user_id = random.choice(users).id
-        order.test = "test"
         
         db.session.add(order)
         print(f"{i} order created")

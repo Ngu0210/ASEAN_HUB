@@ -6,7 +6,6 @@ class OrderSchema(ma.SQLAlchemyAutoSchema):
         model = Order
 
     date_time = ma.String(required=True)
-    test = ma.String()
 
 order_schema = OrderSchema()
 orders_schema = OrderSchema(many=True)
